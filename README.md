@@ -2,17 +2,21 @@
 
 A bunch of small handy tools on top of Backbone.
 
-### MagicView
+#### `MagicView`
 
 Backbone.View has been extended into MagicView (better name pending) with the following handy updates:
 
-#### Template attribute (with proper typing):
+##### Template attribute (with proper typing):
 
     template:Template = loadTemplate('whatever');
 
 Set the value of the template and it'll be automatically rendered. No need for initialize/render methods, unless you're doing something fancy.
 
-#### Subviews:
+##### No more _.bindAll
+
+`_.bindAll` making you rage? Well, prepare to enter a rage-free zone with BackboneX - all class functions are magically bound to `this` without having to do any extra work, just like it should be in any sane language. 
+
+##### Subviews:
 
     subviews:SubviewList = {
       '.hero-image': (_attrs) => { return new HeroImageView(_attrs); },
@@ -22,11 +26,11 @@ Set the value of the template and it'll be automatically rendered. No need for i
 
 No more boilerplate inside `render` just to add some subviews. Not only that, but subviews track their parents now, so cleaning up views becomes a simple recursive call, rather than a nightmare.
 
-#### Event propagation:
+##### Event propagation:
 
 `trigger` an event and it'll propagate all the way up to its parents and grandparents. It'll stop as soon as you `return false` within the event callback. Now you don't have to deal with passing events through multiple views.
 
-### MagicListView
+#### `MagicListView`
 
 Construct a simple list out of a collection and a subview. Super simple!
 
@@ -37,6 +41,6 @@ Construct a simple list out of a collection and a subview. Super simple!
     
     new FriendList({ collection: friendCollection });
 
-### WOW
+#### WOW
 
 Doesn't that sound awesome?!? Download it today!
