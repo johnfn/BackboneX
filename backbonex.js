@@ -63,8 +63,12 @@ var MagicView = (function (_super) {
         this.renderEl();
         for (var el in this.subviews) {
             var viewMaker = this.subviews[el];
+            var $el = this.$(el);
+            if (!$el) {
+                throw "no el with the name " + el + " found. :(";
+            }
             var view = viewMaker({
-                el: this.$(el),
+                el: $el,
                 parent: this
             });
             view.render();
