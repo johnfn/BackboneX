@@ -22,10 +22,19 @@ var MagicView = (function (_super) {
         this.subviews = {};
     }
     MagicView.prototype.initialize = function (attrs) {
-        _.bindAll(this, 'render');
+        this.bindEverything();
         this.attrs = attrs;
         this.parent = attrs.parent || null;
         this.subviews = attrs.subviews || {};
+    };
+    MagicView.prototype.bindEverything = function () {
+        var args = [this, 'trigger', 'renderEl', 'render'];
+        for (var prop in this) {
+            if (_.isFunction(this[prop]) && !(prop in Backbone.View.prototype)) {
+                args.push(prop);
+            }
+        }
+        _.bindAll.apply(this, args);
     };
     // propagate events upward to parent MagicViews
     MagicView.prototype.trigger = function (eventName) {
