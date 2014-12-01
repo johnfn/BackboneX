@@ -42,9 +42,10 @@ var MagicView = (function (_super) {
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
-        var result = _super.prototype.trigger.call(this, eventName, args);
+        var args = [eventName].concat(args);
+        var result = _super.prototype.trigger.apply(this, args);
         if (this.parent && result !== false) {
-            this.parent.trigger(eventName, args);
+            this.parent.trigger.apply(this, args);
         }
     };
     // pull this out so we could override it in a superclass
