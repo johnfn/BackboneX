@@ -20,6 +20,7 @@ var MagicView = (function (_super) {
             return "";
         };
         this.subviews = {};
+        this.subviewObjects = {};
     }
     MagicView.prototype.initialize = function (attrs) {
         this.bindEverything();
@@ -35,6 +36,12 @@ var MagicView = (function (_super) {
             }
         }
         _.bindAll.apply(this, args);
+    };
+    MagicView.prototype.getSubview = function (el) {
+        if (!(el in this.subviewObjects)) {
+            throw "no el named " + el + " in this MagicView's subviews.";
+        }
+        return this.subviewObjects[el];
     };
     // propagate events upward to parent MagicViews
     MagicView.prototype.trigger = function (eventName) {
@@ -61,6 +68,7 @@ var MagicView = (function (_super) {
                 parent: this
             });
             view.render();
+            this.subviewObjects[el] = view;
         }
         return this;
     };
