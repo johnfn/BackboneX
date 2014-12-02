@@ -19,14 +19,15 @@ var MagicView = (function (_super) {
             throw "no template! :X";
             return "";
         };
-        this.subviews = {};
         this.subviewObjects = {};
     }
+    MagicView.prototype.subviews = function () {
+        return {};
+    };
     MagicView.prototype.initialize = function (attrs) {
         this.bindEverything();
         this.attrs = attrs;
         this.parent = attrs.parent || null;
-        this.subviews = attrs.subviews || {};
     };
     MagicView.prototype.bindEverything = function () {
         var args = [this, 'trigger', 'renderEl', 'render'];
@@ -57,12 +58,13 @@ var MagicView = (function (_super) {
     };
     // pull this out so we could override it in a superclass
     MagicView.prototype.renderEl = function () {
-        this.el.innerHTML = this.template(this.model ? this.model.toJSON() : {});
+        this.el.innerHTML = this.template(this.model ? this.model.toJSON() : { __no_model: true });
     };
     MagicView.prototype.render = function () {
+        var subviews = this.subviews();
         this.renderEl();
-        for (var el in this.subviews) {
-            var viewMaker = this.subviews[el];
+        for (var el in subviews) {
+            var viewMaker = subviews[el];
             var $el = this.$(el);
             if (!$el) {
                 throw "no el with the name " + el + " found. :(";

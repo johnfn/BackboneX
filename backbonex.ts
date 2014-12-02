@@ -6,7 +6,7 @@ interface SubviewList {[key: string]: (attrs?:any) => MagicView<Backbone.Model> 
 
 class MagicView<T extends Backbone.Model> extends Backbone.View<T> {
   template:Template = function(...attrs:any[]) { throw "no template! :X"; return ""; };
-  subviews:SubviewList = {};
+  subviews():SubviewList { return {}; }
   subviewObjects:{[key: string]: MagicView<Backbone.Model>} = {};
   attrs:any;
   parent:MagicView<Backbone.Model>;
@@ -16,7 +16,6 @@ class MagicView<T extends Backbone.Model> extends Backbone.View<T> {
 
     this.attrs = attrs;
     this.parent = attrs.parent || null;
-    this.subviews = attrs.subviews || {};
   }
 
   private bindEverything() {
@@ -51,14 +50,15 @@ class MagicView<T extends Backbone.Model> extends Backbone.View<T> {
 
   // pull this out so we could override it in a superclass
   renderEl():void {
-    this.el.innerHTML = this.template(this.model ? this.model.toJSON() : {});
+    this.el.innerHTML = this.template(this.model ? this.model.toJSON() : { __no_model: true });
   }
 
   render():Backbone.View<T> {
+    var subviews:SubviewList = this.subviews();
     this.renderEl();
 
-    for (var el in this.subviews) {
-      var viewMaker:ViewMaker = this.subviews[el];
+    for (var el in subviews) {
+      var viewMaker:ViewMaker = subviews[el];
       var $el:JQuery = this.$(el);
 
       if (!$el) {
