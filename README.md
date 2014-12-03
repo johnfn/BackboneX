@@ -18,7 +18,7 @@ Set the value of the template and it'll be automatically rendered. No need for i
 
 ##### Subviews:
 
-    subviews:SubviewList = {
+    subviews():SubviewList = {
       '.hero-image': (_attrs) => { return new HeroImageView(_attrs); },
       '.side-panel': (_attrs) => { return new SidePanelView(_attrs); },
       '.footer': (_attrs) => { return new FooterView(_attrs); }
@@ -40,6 +40,10 @@ Construct a simple list out of a collection and a subview. Super simple!
     }
     
     new FriendList({ collection: friendCollection });
+
+#### Sane errors
+
+Unline Backbone, BackboneX will actually tell you what went wrong when you make a mistake, rather than making you deal with 5 stack frames of garbage you didn't write. What a concept!
 
 #### WOW
 
