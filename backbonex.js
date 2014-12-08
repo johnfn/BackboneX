@@ -58,7 +58,9 @@ var MagicView = (function (_super) {
     };
     // pull this out so we could override it in a superclass
     MagicView.prototype.renderEl = function () {
-        this.el.innerHTML = this.template(this.model ? this.model.toJSON() : { __no_model: true });
+        this.el.innerHTML = this.template(_.extend({
+            __no_model: !this.model
+        }, this.model ? this.model.toJSON() : {}));
     };
     MagicView.prototype.render = function () {
         var subviews = this.subviews();
@@ -84,10 +86,18 @@ var MagicListView = (function (_super) {
     __extends(MagicListView, _super);
     function MagicListView() {
         _super.apply(this, arguments);
+        // if you pass in a listEl, then the list will go in that el - otherwise, it'll just be the entire element.
+        this.listEl = "";
     }
     MagicListView.prototype.subview = function () {
         throw "need to implement subview for MagicListView!";
         return undefined;
+    };
+    MagicListView.prototype.initialize = function (attrs) {
+        if (this.listEl == "") {
+            this.tagName = "div";
+        }
+        _super.prototype.initialize.call(this, attrs);
     };
     MagicListView.prototype.renderEl = function () {
         var _this = this;
@@ -95,7 +105,7 @@ var MagicListView = (function (_super) {
         this.collection.each(function (m) {
             var subviewType = _this.subview();
             var subview = new subviewType({ model: m, parent: _this });
-            subview.setElement($("<div>").appendTo(_this.$(".list-container")));
+            subview.setElement($("<div>").appendTo(_this.listEl == "" ? _this.$el : _this.$(_this.listEl)));
             subview.render();
         });
     };
